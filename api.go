@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/russross/blackfriday"
 )
 
 type APIServer struct {
@@ -73,6 +74,57 @@ func (api *APIServer) handleCreatePage(c *gin.Context) {
 	c.String(200, fmt.Sprintf("Created <a href=\"/%s\">%s</a> successfully!", hash, title))
 }
 
+func (api *APIServer) handleSearch(c *gin.Context) {
+	query := c.Query("q")
+
+	docs, err := api.store.SearchPages(query)
+	if err != nil {
+		docs = []PageDoc{}
+		log.Default().Println(err)
+	}
+
+	c.HTML(200, "search.html", gin.H{
+		"num":     len(docs),
+		"results": docs,
+	})
+}
+
+func (api *APIServer) handleGetPage(c *gin.Context) {
+	hash := c.Param("hash")
+
+	page, err := api.store.GetPage(hash)
+	if err != nil {
+		log.Default().Println("Error getting page:", err)
+		c.String(500, "Error getting page")
+		return
+	}
+
+	html := blackfriday.MarkdownCommon([]byte(page.Content))
+	page.Content = string(html)
+
+	c.HTML(200, "page.html", gin.H{
+		"Page": page,
+	})
+}
+
+func (api *APIServer) handleListPage(c *gin.Context) {
+	pages, err := api.store.GetPages()
+	if err != nil {
+		log.Default().Println("Error getting page:", err)
+		c.String(500, "Error getting page")
+		return
+	}
+
+	//reverse the pages so that the newest is first
+	for i, j := 0, len(pages)-1; i < j; i, j = i+1, j-1 {
+		pages[i], pages[j] = pages[j], pages[i]
+	}
+
+	c.HTML(200, "list.html", gin.H{
+		"Pages": pages,
+	})
+}
+
 func (api *APIServer) Start() {
 	r := gin.Default()
 
@@ -84,6 +136,9 @@ func (api *APIServer) Start() {
 
 	r.GET("/", api.handleIndex)
 	r.GET("/new", api.handleCreate)
+	r.GET("/search", api.handleSearch)
+	r.GET("/quips/:hash", api.handleGetPage)
+	r.GET("/list", api.handleListPage)
 
 	r.POST("/create", api.handleCreatePage)
 

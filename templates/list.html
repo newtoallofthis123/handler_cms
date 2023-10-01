@@ -1,0 +1,37 @@
+{{template "base.html"}}
+
+<div class="p-3">
+    <table>
+        <thead>
+            <tr>
+                <th class="border-2 border-black dark:border-neutral-500 p-2">Name</th>
+                <th class="border-2 border-black dark:border-neutral-500 p-2">Author</th>
+                <th class="border-2 border-black dark:border-neutral-500 p-2">Date</th>
+                <th class="border-2 border-black dark:border-neutral-500 p-2">Edit</th>
+                <th class="border-2 border-black dark:border-neutral-500 p-2">Delete</th>
+                <th class="border-2 border-black dark:border-neutral-500 p-2">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Pages}}
+            <tr>
+                <td class="border-2 border-black dark:border-neutral-500 p-2">
+                    <a href="/quips/{{ .Hash }}">{{ .Name }}</a>
+                </td>
+                <td class="border-2 border-black dark:border-neutral-500 p-2">{{ .Author }}</td>
+                <td class="created_at border-2 border-black dark:border-neutral-500 p-2">{{ .Date }}</td>
+                <td class="border-2 border-black dark:border-neutral-500 p-2">📝 Edit</td>
+                <td class="border-2 border-black dark:border-neutral-500 p-2">🗑️ Delete</td>
+                <td class="border-2 border-black dark:border-neutral-500 p-2">👀 View</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+<script>
+    var created_at = document.getElementsByClassName("created_at");
+        for (var i = 0; i < created_at.length; i++) {
+            var date = new Date(created_at[i].innerHTML.trim());
+            created_at[i].innerHTML = date.toLocaleString();
+        }
+</script>

@@ -1,0 +1,35 @@
+{{template "base.html"}}
+
+<div class="flex flex-col justify-center items-center">
+    <ul class="w-3/5">
+        {{if .results}}
+        <p class="text-xl font-bold py-4">
+            🟢 {{.num}} Results found!
+        </p>
+        {{range .results}}
+        <a href="/quips/{{ .Hash }}">
+            <li class="py-3">
+                <h2 class="text-xl pb-1"><span class="emoji"></span>{{.Name}}</h2>
+                <p class="pb-2">By {{.Author}}</p>
+                <p class="doc_content">{{.Content}}</p>
+                <p class="created_at pt-2">{{.Date}}</p>
+            </li>
+        </a>
+        {{end}}
+        {{else}}
+        <p class="text-xl">No results found!</p>
+        {{end}}
+    </ul>
+</div>
+<script>
+    var created_at = document.getElementsByClassName("created_at");
+    for (var i = 0; i < created_at.length; i++) {
+        var date = new Date(created_at[i].innerHTML.trim());
+        created_at[i].innerHTML = date.toLocaleString();
+    }
+
+    var doc_content = document.getElementsByClassName("doc_content");
+    for (var i = 0; i < doc_content.length; i++) {
+        doc_content[i].innerHTML = doc_content[i].innerHTML.slice(0, 200).trim() + "...";
+    }
+</script>

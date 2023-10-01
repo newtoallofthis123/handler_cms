@@ -15,9 +15,16 @@
 </head>
 {{template "nav.html"}}
 
-<body>
+<body class="dark:bg-neutral-900 dark:text-white">
     {{block "body" .}}
     {{end}}
 </body>
-
+<script>
+    if(localStorage.getItem("theme") == "dark"){
+        document.body.classList.add("dark");
+    }
+    else{
+        document.body.classList.remove("dark");
+    }
+</script>
 </html>

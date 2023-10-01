@@ -1,0 +1,94 @@
+{{ template "base.html" }}
+
+<div class="flex flex-col justify-center items-center px-3 py-5">
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    </head>
+    <div class="border-2 border-r-8 border-b-8 rounded-2xl w-4/5 border-black dark:border-neutral-500">
+        <div class="text-center w-full border-b-2 border-black dark:border-neutral-500 p-3">
+            <p class="text-lg">
+                <span class="font-bold">Title:</span> {{ .Page.Name }}
+            </p>
+        </div>
+        <div id="content" class="w-full focus:outline-none p-4 text-base">
+            {{ .Page.Content }}
+        </div>
+        <div class="w-full flex flex-row justify-around border-t-2 border-black dark:border-neutral-500 p-2">
+            <div class="w-1/2 flex flex-row">
+                <p>
+                    Written by {{ .Page.Author }}
+                </p>
+            </div>
+            <div class="w-1/2 flex flex-row justify-end items-center">
+                <p id="created_at">{{ .Page.Date }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var created_at = document.getElementById("created_at");
+    var date = new Date(created_at.innerHTML.trim());
+    created_at.innerHTML = date.toLocaleString();
+
+    md_content = document.getElementById("content").innerText
+    document.getElementById("content").innerHTML = md_content
+</script>
+<style is:inline>
+    #update {
+        font-family: "Hubot Sans", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    strong {
+        font-weight: 700;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        padding: 1rem 0;
+        font-weight: 700;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    p {
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.8;
+    }
+
+    li {
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.8;
+    }
+
+    ol {
+        padding: 0.25rem 1rem;
+        list-style: decimal;
+    }
+
+    code {
+        font-family: "Fira Code", 'Courier New', Courier, monospace;
+        font-size: 0.9rem;
+        border: 1px solid #454545;
+        border-radius: 5px;
+        padding: 0.25rem;
+    }
+
+    #update a {
+        font-weight: 700;
+    }
+
+    @media screen and (max-width: 728px) {
+        p {
+            line-height: 2rem;
+        }
+
+        .utterances {
+            max-width: 100%;
+        }
+    }
+</style>
