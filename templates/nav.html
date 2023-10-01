@@ -1,0 +1,31 @@
+<nav class="flex flex-row justify-center items-baseline p-1">
+    <div class="w-1/2">
+        <h2 class="text-3xl font-bold">
+            <a href="/">🐶 NoobCMS</a>
+        </h2>
+    </div>
+    <div class="flex flex-row justify-end items-center w-1/2 pr-5">
+        <form action="/search" class="border-2 border-neutral-600 rounded-xl mx-5">
+            <input class="p-1 focus:outline-none rounded-xl focus-within:outline-none" autocomplete="off" spellcheck="false" type="search" name="q" id="q">
+            <button class="p-0.5" type="submit">🔍</button>
+        </form>
+        <div class="flex flex-row">
+            <p id="login" class="p-2">
+                <a href="/new">
+                    ✨ New 
+                </a>
+            </p>
+            <p id="signup" class="p-2">
+                <a href="/list">
+                    📜 List
+                </a>
+            </p>
+            <p class="p-2">
+                <a href="/about">
+                    ❓About
+                </a>
+            </p>
+        </div>
+        <p class="hidden" id="authcheck"></p>
+    </div>
+</nav>
