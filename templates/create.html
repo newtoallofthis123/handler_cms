@@ -1,0 +1,81 @@
+{{template "base.html"}}
+
+<div class="p-3">
+    <head>
+            <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+            <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+            
+            <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css" />
+            <link rel="stylesheet"
+                href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css" />
+            <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js">
+            </script>
+            <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js">
+            </script>
+            
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" />
+            <link rel="stylesheet"
+                href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css" />
+            <script
+                src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+    </head>
+    <div class="w-full">
+        <form class="border-2 border-r-8 border-b-8 rounded-2xl border-black">
+            <div class="flex flex-row border-b-2 border-black p-1">
+                <input type="text" placeholder="📝 Name of the Update" required="true"
+                    class="w-3/6 text-center text-lg focus:outline-none" name="title" autoComplete="off" spellCheck="false"
+                    id="title" />
+                <input type="text" placeholder="✒️ Author Name" required="true"
+                    class="w-2/6 text-center text-lg focus:outline-none" name="author" autoComplete="off" spellCheck="false"
+                    id="author" />
+                <div class="w-1/6 text-center text-lg flex flex-col justify-center items-center">
+                    <p id="result"></p>
+                </div>
+                <button id="create"
+                    hx-post="/create" hx-target="#result" hx-swap="innerHTML" hx-trigger="click delay:500ms"
+                    class="w-1/6 bg-black text-white rounded-xl text-xl font-bold p-2 m-2 transform duration-500 hover:scale-105 focus:outline-none"
+                    type="submit">
+                    ✨ Create
+                </button>
+            </div>
+            <textarea name="content" required="true" id="content" class="hidden" rows="20"
+                spellCheck="false" cols="10">
+            </textarea>
+            <div class="w-full min-h-screen" id="editor">
+
+            </div>
+            <div class="w-full text-lg flex flex-row justify-around border-t-2 border-black p-2">
+                <div class="w-1/2 flex flex-row justify-end items-center">
+                    <p id="time"></p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+    .toastui-editor-contents p{
+        font-size: 1rem;
+    }
+    .toastui-editor textarea{
+        font-size: 1rem;
+    }
+    .ProseMirror {
+        font-size: 1rem;
+    }
+</style>
+<script>
+    const { Editor } = toastui;
+    const { colorSyntax, codeSyntaxHighlight } = Editor.plugin;
+    const editor = new Editor({
+            el: document.querySelector('#editor'),
+            initialValue: '## Hello Noob!',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical',
+            usageStatistics: false,
+            plugins: [colorSyntax, codeSyntaxHighlight],
+        });
+
+    document.getElementById("create").addEventListener('click', () => {
+        document.getElementById("content").value = editor.getMarkdown();
+    })
+</script>

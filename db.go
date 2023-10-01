@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -150,4 +152,26 @@ func (db *DBInstance) DeletePage(hash string) error {
 
 	db.HydrateCache()
 	return nil
+}
+
+// Search the cache
+func (db *DBInstance) SearchPages(query string) ([]PageDoc, error) {
+	query = strings.ToLower(query)
+	docs, err := db.GetPages()
+	if err != nil {
+		log.Default().Println("Error hydrating cache:", err)
+		return nil, err
+	}
+
+	var results []PageDoc
+
+	for _, doc := range docs {
+		docString := fmt.Sprintf("%v", doc)
+		docString = strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(docString, "-", ""), ":", ""), "{", ""))
+		if strings.Contains(docString, query) {
+			results = append(results, doc)
+		}
+	}
+
+	return results, nil
 }

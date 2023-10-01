@@ -27,6 +27,7 @@ type Store interface {
 	UpdatePage(PageDocRequest) error
 	DeletePage(string) error
 	GetPages() ([]PageDoc, error)
+	SearchPages(string) ([]PageDoc, error)
 }
 
 type PageDoc struct {

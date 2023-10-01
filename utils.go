@@ -3,8 +3,11 @@ package main
 import (
 	"crypto/rand"
 	"fmt"
+	"log"
 	"math/big"
 	"os"
+	"regexp"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
@@ -51,4 +54,18 @@ func RanHash() string {
 	}
 
 	return slug
+}
+
+func ConvertTitleToHash(title string) string {
+	title = strings.ToLower(title)
+	title = strings.Replace(title, " ", "-", -1)
+	reg, err := regexp.Compile("[^a-zA-Z0-9-]+")
+
+	if err != nil {
+		log.Default().Println("Error converting title to hash:", err)
+	}
+
+	title = reg.ReplaceAllString(title, "")
+
+	return title
 }
